@@ -1,4 +1,4 @@
-# instar_crawler
+# Instagram_crawler
 
 인스타 크롤러 만들기
 
