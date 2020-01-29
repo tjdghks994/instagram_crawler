@@ -27,5 +27,15 @@
   - 속도가 느리면 go, c++ 이용
         - 다 만든 후에 적용
 
-- 어떤 데이터가 유의미한 데이터일지 판단하기
+  - 어떤 데이터가 유의미한 데이터일지 판단하기
   - 아이디어 서로 내보기
+
+  - insatll pkg 명시해주기
+
+```
+pip3 install --upgrade --user pip
+pip3 install beautifulsoup4
+pip3 insatll pandas
+pip3 install requests
+등등 사용한 pkg 인스톨 명령어 적어두기
+```
