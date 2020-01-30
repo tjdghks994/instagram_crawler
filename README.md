@@ -5,6 +5,15 @@
   - cau cps lab - 박성환
   - 학부 연구생 - 최병준, 임채원
 
+# Install Package
+
+```
+pip install beautifulsoup4
+pip insatll pandas
+pip install requests
+pip install selenium
+```
+
 # TODO
 
   - 음식사진 + 해시태그 + 시간 같이 긁어오기
@@ -26,16 +35,6 @@
       - 채원 & 병준 : 추후 조사하기
   - 속도가 느리면 go, c++ 이용
         - 다 만든 후에 적용
-
   - 어떤 데이터가 유의미한 데이터일지 판단하기
   - 아이디어 서로 내보기
 
-  - insatll pkg 명시해주기
-
-```
-pip3 install --upgrade --user pip
-pip3 install beautifulsoup4
-pip3 insatll pandas
-pip3 install requests
-등등 사용한 pkg 인스톨 명령어 적어두기
-```

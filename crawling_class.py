@@ -150,14 +150,19 @@ class instagram_crawler :
 
     #list에 담겨있는 이미지 링크들을 다운로드하는 함수
     def download_img(self, img_url_list) :
-        for i in range(img_url_list) :
-            urlretrieve(img_url_list[i], str(i) + ".jpg")
-
+        filenum = 1
+        for i in img_url_list :
+            for j in i :
+                if j == '0' :
+                    continue
+                r = requests.get(j)
+                with open(str(filenum) + '.jpg', 'wb') as outfile:
+                    outfile.write(r.content)
+                filenum += 1
 
 if __name__ == '__main__' :
 
     crawler = instagram_crawler()
-
     keyword = input("크롤링할 해쉬태그를 입력하세요 ")
     url = "https://instagram.com/explore/tags/" + str(keyword)
     crawler.set_url(url)
@@ -167,3 +172,9 @@ if __name__ == '__main__' :
     crawler.collect_url(count)
     crawler.make_data()
     crawler.save_data("insta_test.csv")
+
+
+    data = pd.read_csv("insta_test.csv")
+    img_url_list = data[['4','5','6']]
+    img_url_list = img_url_list.values.tolist()    
+    crawler.download_img(img_url_list)
