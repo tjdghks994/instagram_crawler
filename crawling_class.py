@@ -65,10 +65,9 @@ class instagram_crawler :
                     last_height = new_height
                     continue
 
-
-        reallinknum = len(reallink)
-        print(str(reallinknum)+"개의 게시물 URL 수집완료")
         reallink = list(set(reallink))
+        print(str(len(reallink))+"개의 게시물 URL을 수집했습니다.")
+
         driver.close()
         self.collected_url = reallink
 
@@ -167,7 +166,7 @@ if __name__ == '__main__' :
     url = "https://instagram.com/explore/tags/" + str(keyword)
     crawler.set_url(url)
 
-    count = int(input("게시글 갯수를 입력하세요 "))
+    count = int(input("최대 게시글 갯수를 입력해주세요 "))
 
     crawler.collect_url(count)
     crawler.make_data()
