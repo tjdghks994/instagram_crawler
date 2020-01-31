@@ -12,6 +12,7 @@ pip install beautifulsoup4
 pip insatll pandas
 pip install requests
 pip install selenium
+pip install lxml
 ```
 
 # TODO
