@@ -4,6 +4,7 @@ from datetime import datetime
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from time import sleep
+from time import time
 from multiprocessing import Pool, Value, freeze_support
 import pandas as pd
 import requests
@@ -71,6 +72,8 @@ class instagram_crawler :
         driver.close()
         self.collected_url = reallink
 
+
+
     #게시글로부터 음식사진, 해시태그, 시간 정보 가져와 dataframe으로 만들기
     def make_data(self) :
 
@@ -80,59 +83,72 @@ class instagram_crawler :
         csvtext = []
         driver = webdriver.Chrome('chromedriver.exe')
         
+        error = 0
+
         for i in range(0, len(self.collected_url)) :
-            url = 'https://www.instagram.com/' + str(self.collected_url[i])
-            driver.get(url)
-            csvtext.append([])
 
-            pageString = driver.page_source
-            soup = BeautifulSoup(pageString, "lxml")
+            try :
+                url = 'https://www.instagram.com/' + str(self.collected_url[i])
+                driver.get(url)
+                csvtext.append([])
 
-            #게시글의 datetime 가져오기
-            date = soup.select('time')[1]
-            date = date.attrs['datetime']
-            csvtext[i].append(date)
-            max_cnt = 0
-
-            #게시글의 hashtag 가져오기
-            for hashtag in soup.find_all("meta", attrs={"property":"instapp:hashtags"}) :
-                is_trash = False
-                hashtag = hashtag['content']
-                for trash in trash_list :
-                    if re.search(trash, hashtag) :
-                        is_trash = True
-                        break
-                if not is_trash :
-                    csvtext[i].append(hashtag)
-                    max_cnt += 1
-
-                if max_cnt >= 3 :
-                    break
-            while(max_cnt < 3) :
-                csvtext[i].append("0")
-                max_cnt += 1
-
-            #게시글의 imglink 가져오기
-            max_cnt = 0
-            while(1) :
-                sleep(1)
                 pageString = driver.page_source
                 soup = BeautifulSoup(pageString, "lxml")
-                imgs = soup.select('img')[1]
-                imgs = imgs.attrs['src']
-                csvtext[i].append(imgs)
-                max_cnt += 1
 
-                if max_cnt >= 3 :
-                    break
-                try :
-                    driver.find_element_by_class_name("coreSpriteRightChevron").click()
-                except NoSuchElementException :
-                    break
+                #게시글의 datetime 가져오기
+                date = soup.select('time')[1]
+                date = date.attrs['datetime']
+                csvtext[i].append(date)
+                max_cnt = 0
 
-            while(max_cnt < 3) :
-                csvtext[i].append("0")
-                max_cnt += 1
+                #게시글의 hashtag 가져오기
+                for hashtag in soup.find_all("meta", attrs={"property":"instapp:hashtags"}) :
+                    is_trash = False
+                    hashtag = hashtag['content']
+                    for trash in trash_list :
+                        if re.search(trash, hashtag) :
+                            is_trash = True
+                            break
+                    if not is_trash :
+                        csvtext[i].append(hashtag)
+                        max_cnt += 1
+
+                    if max_cnt >= 3 :
+                        break
+                while(max_cnt < 3) :
+                    csvtext[i].append("0")
+                    max_cnt += 1
+
+                #게시글의 imglink 가져오기
+                max_cnt = 0
+                while(1) :
+                    sleep(1)
+                    pageString = driver.page_source
+                    soup = BeautifulSoup(pageString, "lxml")
+                    imgs = soup.select('img')[1]
+                    imgs = imgs.attrs['src']
+                    csvtext[i].append(imgs)
+                    max_cnt += 1
+
+                    if max_cnt >= 3 :
+                        break
+                    try :
+                        driver.find_element_by_class_name("coreSpriteRightChevron").click()
+                    except NoSuchElementException :
+                        break
+
+                while(max_cnt < 3) :
+                    csvtext[i].append("0")
+                    max_cnt += 1
+
+            except Exception as e :
+                print('예외 발생', e)
+                error += 1
+                for j in range(6) :
+                    csvtext[i].append("0")
+
+        
+        print('예외 발생 횟수 = %d' % error)
 
         self.data = pd.DataFrame(csvtext)
         driver.close()
@@ -159,7 +175,18 @@ class instagram_crawler :
                     outfile.write(r.content)
                 filenum += 1
 
+
+def multiprocess(crawler) :
+
+    pool = Pool(processes=4)
+    pool.map(crawler.get_collected_url, crawler.make_data())
+
+
+
 if __name__ == '__main__' :
+
+    start_time = time()
+
 
     crawler = instagram_crawler()
     keyword = input("크롤링할 해쉬태그를 입력하세요 ")
@@ -169,6 +196,8 @@ if __name__ == '__main__' :
     count = int(input("최대 게시글 갯수를 입력해주세요 "))
 
     crawler.collect_url(count)
+
+
     crawler.make_data()
     crawler.save_data("insta_test.csv")
 
@@ -177,3 +206,6 @@ if __name__ == '__main__' :
     img_url_list = data[['4','5','6']]
     img_url_list = img_url_list.values.tolist()    
     crawler.download_img(img_url_list)
+
+    print("%s초 걸림" % (time() - start_time))
+
