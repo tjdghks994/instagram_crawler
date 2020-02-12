@@ -2,6 +2,7 @@ from urllib.request import Request, urlopen, urlretrieve
 from bs4 import BeautifulSoup
 from datetime import datetime
 from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import NoSuchElementException
 from time import sleep
 from time import time
@@ -11,6 +12,8 @@ import requests
 import json
 import os
 import re
+from selenium.webdriver.chrome.options import Options
+
 
 class instagram_crawler :
 
@@ -18,17 +21,51 @@ class instagram_crawler :
         self.url = None
         self.collected_url = None
         self.data = None
+        self.options = None
 
     def set_url(self, url) :
         self.url = url
+    
+    def set_options(self) :
+        self.options = Options() 
+        prefs = {'profile.default_content_setting_values': {'images': 2, #'cookies' : 2,
+                                                            'plugins' : 2, 'popups': 2, 
+                                                            'geolocation': 2, 'notifications' : 2, 
+                                                            'auto_select_certificate': 2, 'fullscreen' : 2, 
+                                                            'mouselock' : 2, 'mixed_script': 2, 
+                                                            'media_stream' : 2, 'media_stream_mic' : 2, 
+                                                            'media_stream_camera': 2, 'protocol_handlers' : 2, 
+                                                            'ppapi_broker' : 2, 'automatic_downloads': 2, 
+                                                            'midi_sysex' : 2, 'push_messaging' : 2, 
+                                                            'ssl_cert_decisions': 2, 'metro_switch_to_desktop' : 2, 
+                                                            'protected_media_identifier': 2, 'app_banner': 2, 
+                                                            'site_engagement' : 2, 'durable_storage' : 2}} 
+        self.options.add_experimental_option('prefs', prefs) 
+        self.options.add_argument("start-maximized") 
+        self.options.add_argument("disable-infobars") 
+        self.options.add_argument("--disable-extensions") 
+        
+        #창 없는 크롬으로 실행하는 옵션
+        self.options.add_argument('--headless')    
+    
 
     #게시글 url을 수집
     def collect_url(self, count) :
         url = self.url
-        driver = webdriver.Chrome('chromedriver.exe')
+        
+        driver = webdriver.Chrome(options = self.options)
+        
+        driver.get("https://www.instagram.com/accounts/login/?source=auth_switcher")
+        driver.implicitly_wait(1)
+        driver.find_elements_by_name("username")[0].send_keys("goka2052")
+        driver.find_elements_by_name("password")[0].send_keys("dlstmxk2052")
+        elem = driver.find_elements_by_name("password")[0]
+        elem.send_keys(Keys.RETURN)
+        sleep(3)
+
         driver.get(url)
-        sleep(5)
-        SCROLL_PAUSE_TIME = 1.0
+        driver.implicitly_wait(1)
+        SCROLL_PAUSE_TIME = 3
         reallink = []
         finish = False
 
@@ -81,7 +118,7 @@ class instagram_crawler :
         trash_list = ['반사', '팔', 'fff', 'f4f', 'follow', 'like', '일상', '스타', '그램', 'lfl', '좋튀', '댓글', '음식',
                     'l4f', '좋반', '데일리', '셀카', '소통', '하면', '하자', '오오디디', 'oodd', '환영']
         csvtext = []
-        driver = webdriver.Chrome('chromedriver.exe')
+        driver = webdriver.Chrome(options = self.options)
         
         error = 0
 
@@ -122,7 +159,6 @@ class instagram_crawler :
                 #게시글의 imglink 가져오기
                 max_cnt = 0
                 while(1) :
-                    sleep(1)
                     pageString = driver.page_source
                     soup = BeautifulSoup(pageString, "lxml")
                     imgs = soup.select('img')[1]
@@ -176,19 +212,14 @@ class instagram_crawler :
                 filenum += 1
 
 
-def multiprocess(crawler) :
-
-    pool = Pool(processes=4)
-    pool.map(crawler.get_collected_url, crawler.make_data())
-
-
-
 if __name__ == '__main__' :
 
     start_time = time()
 
 
     crawler = instagram_crawler()
+    crawler.set_options()
+
     keyword = input("크롤링할 해쉬태그를 입력하세요 ")
     url = "https://instagram.com/explore/tags/" + str(keyword)
     crawler.set_url(url)

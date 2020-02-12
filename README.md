@@ -17,34 +17,28 @@ pip install lxml
 
 # TODO
 
+## ~20.02.17
+
 - 크롤링 속도 개선
-  - 병준 : multiprocessing 적용하기
-    - 적용하기가 생각보다 쉽지 않아서 고민중임
+  - 병준 : Chrome Driver에 Options을 주고 sleep 시간 최소화시킴 (완료 / 20.02.12)
+    - 약 1/3 단축
   - 병준 : try / except로 코드 변경하여 예외처리 해주기 (완료 / 20.02.12)
   
+  - 인스타 자동 로그인
+  - 로그인이 되어있지 않으면 게시물을 계속해서 가져올 수 없음
+    - 병준 : 자동 로그인 구현하기 (완료 / 20.02.12)
+  - 병준 : multiprocessing 적용하기
+    - 적용하기가 생각보다 쉽지 않아서 고민
   
-
 - 음식 색 구분
   - 채원&병준 : 색 검출 알고리즘 찾아보기
   - https://github.com/beerboaa/Color-Classification-CNN 참고하기
   
-  
-- 음식 유무 구분
-  - 채원 : YOLO 이용하기 - yolo v3(https://github.com/eriklindernoren/PyTorch-YOLOv3) 사용, train/detect/config/data 등 맞춰서 수정
-    - colab에서 train 돌릴 때 data configuration 부분에서 오류 계속 발생(path 문제인 듯 함)
-  - training dataset 설정 : #음식, #맛집으로 검색하면 얼굴, 식당 내부 풍경, 멍멍이, 고양이 등 다양한 사진이 같이 나옴
-    이거 정제하기 위해서 yolo를 사용해 face(face, half_face, phone_face), chair, desk, dog, cat 의 점수가 높게 나온 사진들은 제외 
-     인스타그램 크롤러(병준이가 만든거) 사용해서 #얼굴, #댕스타그램, #반려묘, #카페의자추천, #카페식탁 / 100개 게시글 크롤링해서 이미지   
-     추출 후 labeimg 사용해서 이미지 라벨링 완료 -> plate 폴더에 저장 
-  
-  
-
 - 2016년 ~ 2019년 ,1월 ~ 12월, 우리나라 비만율, 홍콩 비만율 비교 (평균 비만율로 하면 됨 / 나이대 무시)
+  
   - 채원 & 병준 : 추후 조사하기
 
-
-
----
+## ~20.01.31
 
   - 음식사진 + 해시태그 + 시간 같이 긁어오기
       - 병준 : [datetime, hashtags, imglinks] 형태로 csv에 저장 (완료 / 20.01.20)
