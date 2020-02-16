@@ -15,7 +15,8 @@ import re
 #게시글 url을 가져와서 리스트 형태로 return
 def get_url_list() :
     url = "https://instagram.com/explore/tags/음식/"
-    driver = webdriver.Chrome('chromedriver.exe')
+    #driver = webdriver.Chrome('chromedriver.exe')
+    driver = webdriver.Chrome('/Users/psh/Python/instagram_crawler/chromedriver')
     driver.get(url)
     sleep(5)
 
@@ -67,7 +68,8 @@ def get_info(url_list) :
                 'l4f', '좋반', '데일리', '셀카', '소통', '하면', '하자', '오오디디', 'oodd', '환영']
 
     csvtext = []
-    driver = webdriver.Chrome('chromedriver.exe')
+    #driver = webdriver.Chrome('chromedriver.exe')
+    driver = webdriver.Chrome('/Users/psh/Python/instagram_crawler/chromedriver')
     
 
     for i in range(0, len(url_list)) :
@@ -108,7 +110,7 @@ def get_info(url_list) :
                 break
     
     data = pd.DataFrame(csvtext)
-    data.to_csv("insta.csv", encoding="utf-8-sig")
+    data.to_csv("insta_crawl.csv", encoding="utf-8-sig")
     print("저장완료")
     driver.close()
     

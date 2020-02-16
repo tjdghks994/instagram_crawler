@@ -2,8 +2,8 @@
 
 인스타 크롤러 만들기
 
-  - cau cps lab - 박성환
-  - 학부 연구생 - 최병준, 임채원
+  - *CAU CPS LAB* - 박성환
+  - *학부 연구생* - 최병준, 임채원
 
 # Install Package
 
@@ -15,7 +15,7 @@ pip install selenium
 pip install lxml
 ```
 
-# TODO
+# AS-IS
 
 ## ~20.02.17
 
@@ -25,18 +25,9 @@ pip install lxml
   - 병준 : try / except로 코드 변경하여 예외처리 해주기 (완료 / 20.02.12)
   
   - 인스타 자동 로그인
-  - 로그인이 되어있지 않으면 게시물을 계속해서 가져올 수 없음
+    - 로그인이 되어있지 않으면 게시물을 계속해서 가져올 수 없음
     - 병준 : 자동 로그인 구현하기 (완료 / 20.02.12)
-  - 병준 : multiprocessing 적용하기
-    - 적용하기가 생각보다 쉽지 않아서 고민
-  
-- 음식 색 구분
-  - 채원&병준 : 색 검출 알고리즘 찾아보기
-  - https://github.com/beerboaa/Color-Classification-CNN 참고하기
-  
-- 2016년 ~ 2019년 ,1월 ~ 12월, 우리나라 비만율, 홍콩 비만율 비교 (평균 비만율로 하면 됨 / 나이대 무시)
-  
-  - 채원 & 병준 : 추후 조사하기
+    - _자동 로그인 구현이 안된거 같은데..._
 
 ## ~20.01.31
 
@@ -49,3 +40,27 @@ pip install lxml
   - 코드 모듈화 하여 추후에도 사용 가능하게 만들기
       - 병준 : 코드 모듈화 시키기 (완료(수정 완료) / 20.01.25(20.01.28))
 
+# TO-BE
+
+  - 2016년 ~ 2019년 ,1월 ~ 12월, 우리나라 비만율, 홍콩 비만율 비교 (평균 비만율로 하면 됨 / 나이대 무시)
+    - 채원 & 병준 : 추후 조사하기
+  
+  - 음식 색 구분
+    - 채원&병준 : 색 검출 알고리즘 찾아보기
+    - https://github.com/beerboaa/Color-Classification-CNN 참고하기
+    - *k-means clustering* 조사하기
+      - 색 구분 알고리즘
+  
+  - Multi-processing  
+    - 병준 : multiprocessing 적용하기
+    - 적용하기가 생각보다 쉽지 않아서 고민
+
+  - Crewling
+    - tag가 음식 하나만 하기에는 너무 부실함, 맛집 등 새로운 태그 추가
+
+  - README.md update
+    - Python 및 각 모듈 버전 명시
+    - Reference 추가해두기
+    - 'chromedrive -> chrome 버전 80 이상에서만 사용가능' 추가
+  
+  - 가능하다면 macos 대응해주기
