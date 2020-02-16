@@ -22,6 +22,7 @@ class instagram_crawler :
         self.collected_url = None
         self.data = None
         self.options = None
+        self.path = '/Users/psh/Python/instagram_crawler/'
 
     def set_url(self, url) :
         self.url = url
@@ -53,7 +54,7 @@ class instagram_crawler :
     def collect_url(self, count) :
         url = self.url
         
-        driver = webdriver.Chrome('/Users/psh/Python/instagram_crawler/chromedriver', options = self.options)
+        driver = webdriver.Chrome(self.path + 'chromedriver', options = self.options)
         
         driver.get("https://www.instagram.com/accounts/login/?source=auth_switcher")
         driver.implicitly_wait(1)
@@ -118,7 +119,7 @@ class instagram_crawler :
         trash_list = ['반사', '팔', 'fff', 'f4f', 'follow', 'like', '일상', '스타', '그램', 'lfl', '좋튀', '댓글', '음식',
                     'l4f', '좋반', '데일리', '셀카', '소통', '하면', '하자', '오오디디', 'oodd', '환영']
         csvtext = []
-        driver = webdriver.Chrome('/Users/psh/Python/instagram_crawler/chromedriver', options = self.options)
+        driver = webdriver.Chrome(self.path + 'chromedriver', options = self.options)
         
         error = 0
 
@@ -207,7 +208,7 @@ class instagram_crawler :
                 if j == '0' :
                     continue
                 r = requests.get(j)
-                with open(str(filenum) + '.jpg', 'wb') as outfile:
+                with open(self.path + 'img_crwal/' + str(filenum) + '.jpg', 'wb') as outfile:
                     outfile.write(r.content)
                 filenum += 1
 
