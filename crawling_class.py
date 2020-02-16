@@ -13,7 +13,8 @@ import json
 import os
 import re
 from selenium.webdriver.chrome.options import Options
-
+import numpy as np
+import platform
 
 class instagram_crawler :
 
@@ -22,7 +23,10 @@ class instagram_crawler :
         self.collected_url = None
         self.data = None
         self.options = None
-
+        self.path = None
+    
+    def set_path(self, path) :
+        self.path = path
     def set_url(self, url) :
         self.url = url
     
@@ -53,7 +57,13 @@ class instagram_crawler :
     def collect_url(self, count) :
         url = self.url
         
-        driver = webdriver.Chrome(options = self.options)
+        print('현재 OS = ' + platform.system())
+
+        if (platform.system() == "Windows") :
+            driver = webdriver.Chrome(self.path + 'chromedriver.exe',options = self.options)
+        else :
+            driver = webdriver.Chrome(self.path + 'chromedriver',options = self.options)
+        
         
         driver.get("https://www.instagram.com/accounts/login/?source=auth_switcher")
         driver.implicitly_wait(1)
@@ -118,8 +128,14 @@ class instagram_crawler :
         trash_list = ['반사', '팔', 'fff', 'f4f', 'follow', 'like', '일상', '스타', '그램', 'lfl', '좋튀', '댓글', '음식',
                     'l4f', '좋반', '데일리', '셀카', '소통', '하면', '하자', '오오디디', 'oodd', '환영']
         csvtext = []
-        driver = webdriver.Chrome(options = self.options)
         
+
+        if (platform.system() == "Windows") :
+            driver = webdriver.Chrome(self.path + 'chromedriver.exe',options = self.options)
+        else :
+            driver = webdriver.Chrome(self.path + 'chromedriver',options = self.options)
+        
+
         error = 0
 
         for i in range(0, len(self.collected_url)) :
@@ -201,15 +217,30 @@ class instagram_crawler :
 
     #list에 담겨있는 이미지 링크들을 다운로드하는 함수
     def download_img(self, img_url_list) :
+        self.create_folder()
+
         filenum = 1
         for i in img_url_list :
             for j in i :
-                if j == '0' :
-                    continue
-                r = requests.get(j)
-                with open(str(filenum) + '.jpg', 'wb') as outfile:
-                    outfile.write(r.content)
+                try :
+                    if j == '0' or j == np.nan :
+                        continue
+                    r = requests.get(j)
+                    with open(self.path + 'img_crawl/' + str(filenum) + '.jpg', 'wb') as outfile:
+                        outfile.write(r.content)
+
+                except Exception as e :
+                    print('예외 발생', e)
+
                 filenum += 1
+
+    def create_folder(self) :
+        try :
+            if not os.path.exists(self.path + 'img_crawl') :
+                os.makedirs(self.path + 'img_crawl')
+        except OSError :
+            print('예외발생')
+
 
 
 if __name__ == '__main__' :
@@ -219,6 +250,9 @@ if __name__ == '__main__' :
 
     crawler = instagram_crawler()
     crawler.set_options()
+
+    path = input("경로를 입력하세요 (같은 경로 시 Enter) ")
+    crawler.set_path(path)
 
     keyword = input("크롤링할 해쉬태그를 입력하세요 ")
     url = "https://instagram.com/explore/tags/" + str(keyword)
