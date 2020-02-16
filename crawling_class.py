@@ -139,15 +139,16 @@ class instagram_crawler :
         error = 0
 
         for i in range(0, len(self.collected_url)) :
-
+            if i%20 == 0 :
+                print('진행상황: ' + str(i))
             try :
                 url = 'https://www.instagram.com/' + str(self.collected_url[i])
                 driver.get(url)
                 csvtext.append([])
-
+                
                 pageString = driver.page_source
                 soup = BeautifulSoup(pageString, "lxml")
-
+                
                 #게시글의 datetime 가져오기
                 date = soup.select('time')[1]
                 date = date.attrs['datetime']
@@ -179,6 +180,7 @@ class instagram_crawler :
                     soup = BeautifulSoup(pageString, "lxml")
                     imgs = soup.select('img')[1]
                     imgs = imgs.attrs['src']
+
                     csvtext[i].append(imgs)
                     max_cnt += 1
 
@@ -194,13 +196,13 @@ class instagram_crawler :
                     max_cnt += 1
 
             except Exception as e :
-                print('예외 발생', e)
+                print('make data 예외 발생', e)
                 error += 1
                 for j in range(6) :
                     csvtext[i].append("0")
 
         
-        print('예외 발생 횟수 = %d' % error)
+        print('make data 예외 발생 횟수 = %d' % error)
 
         self.data = pd.DataFrame(csvtext)
         driver.close()
@@ -230,7 +232,7 @@ class instagram_crawler :
                         outfile.write(r.content)
 
                 except Exception as e :
-                    print('예외 발생', e)
+                    print('download img 예외 발생', e)
 
                 filenum += 1
 
@@ -239,7 +241,7 @@ class instagram_crawler :
             if not os.path.exists(self.path + 'img_crawl') :
                 os.makedirs(self.path + 'img_crawl')
         except OSError :
-            print('예외발생')
+            print('create folder 예외발생', OSError)
 
 
 
@@ -251,7 +253,11 @@ if __name__ == '__main__' :
     crawler = instagram_crawler()
     crawler.set_options()
 
-    path = input("경로를 입력하세요 (같은 경로 시 Enter) ")
+    if (platform.system() == "Windows") :
+        path = '/'
+    else :
+        path = '/Users/psh/Python/instagram_crawler/'
+
     crawler.set_path(path)
 
     keyword = input("크롤링할 해쉬태그를 입력하세요 ")
