@@ -2,8 +2,8 @@
 
 인스타 크롤러 만들기
 
-  - *CAU CPS LAB* - 박성환
-  - *학부 연구생* - 최병준, 임채원
+  - **CAU CPS LAB** - 박성환
+  - **학부 연구생** - 최병준, 임채원
 
 # Install Package
 
@@ -48,7 +48,7 @@ pip install lxml
   - 음식 색 구분
     - 채원&병준 : 색 검출 알고리즘 찾아보기
     - https://github.com/beerboaa/Color-Classification-CNN 참고하기
-    - *k-means clustering* 조사하기
+    - **k-means clustering** 조사하기
       - 색 구분 알고리즘
   
   - Multi-processing  
