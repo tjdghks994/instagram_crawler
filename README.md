@@ -22,12 +22,17 @@ pip install lxml
 - 크롤링 속도 개선
   - 병준 : Chrome Driver에 Options을 주고 sleep 시간 최소화시킴 (완료 / 20.02.12)
     - 약 1/3 단축
+    - 참고
+      - https://beomi.github.io/gb-crawling/posts/2017-09-28-HowToMakeWebCrawler-Headless-Chrome.html
+      - https://pcmc.tistory.com/66
+  
   - 병준 : try / except로 코드 변경하여 예외처리 해주기 (완료 / 20.02.12)
   
   - 인스타 자동 로그인
     - 로그인이 되어있지 않으면 게시물을 계속해서 가져올 수 없음
     - 병준 : 자동 로그인 구현하기 (완료 / 20.02.12)
-    - _자동 로그인 구현이 안된거 같은데..._
+    - 참고
+      - https://enfanthoon.tistory.com/87
 
 ## ~20.01.31
 
