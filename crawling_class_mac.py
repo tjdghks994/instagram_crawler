@@ -208,7 +208,7 @@ class instagram_crawler :
                 if j == '0' :
                     continue
                 r = requests.get(j)
-                with open(self.path + 'img_crwal/' + str(filenum) + '.jpg', 'wb') as outfile:
+                with open(self.path + 'img_crawl/' + str(filenum) + '.jpg', 'wb') as outfile:
                     outfile.write(r.content)
                 filenum += 1
 
