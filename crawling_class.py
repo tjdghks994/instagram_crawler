@@ -225,7 +225,7 @@ class instagram_crawler :
         for i in img_url_list :
             for j in i :
                 try :
-                    if j == '0' or j == np.nan :
+                    if j == '0' or j == 0 :
                         continue
                     r = requests.get(j)
                     with open(self.path + 'img_crawl/' + str(filenum) + '.jpg', 'wb') as outfile:
@@ -254,7 +254,7 @@ if __name__ == '__main__' :
     crawler.set_options()
 
     if (platform.system() == "Windows") :
-        path = '/'
+        path = ''
     else :
         path = '/Users/psh/Python/instagram_crawler/'
 
