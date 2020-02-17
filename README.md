@@ -48,6 +48,12 @@ pip install lxml
       - 병준 : 커밋함 (완료 / 20.01.20)
   - 코드 모듈화 하여 추후에도 사용 가능하게 만들기
       - 병준 : 코드 모듈화 시키기 (완료(수정 완료) / 20.01.25(20.01.28))
+  - 음식 유무 구분	
+    - 채원 : YOLO 이용하기 - yolo v3(https://github.com/eriklindernoren/PyTorch-YOLOv3) 사용, train/detect/config/data 등 맞춰서 수정	
+      - colab에서 train 돌릴 때 data configuration 부분에서 오류 계속 발생(path 문제인 듯 함)	
+    - training dataset 설정 : #음식, #맛집으로 검색하면 얼굴, 식당 내부 풍경, 멍멍이, 고양이 등 다양한 사진이 같이 나옴	
+      이거 정제하기 위해서 yolo를 사용해 face(face, half_face, phone_face), chair, desk, dog, cat 의 점수가 높게 나온 사진들은 제외 	
+      인스타그램 크롤러(병준이가 만든거) 사용해서 #얼굴, #댕스타그램, #반려묘, #카페의자추천, #카페식탁 / 100개 게시글 크롤링해서 이미지 추출 후 labeimg 사용해서 이미지 라벨링 완료 -> plate 폴더에 저장 
 
 # TO-BE
 
